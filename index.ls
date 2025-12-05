@@ -10,6 +10,9 @@ stop-by = null
 delay = 60000
 audio-remind = null
 audio-end = null
+foreground-color = '#222'
+background-color = '#000'
+end-volume = 1
 
 new-audio = (file) ->
   node = new Audio!
@@ -24,6 +27,31 @@ sound-toggle = (des, state) ->
   else des
     ..currentTime = 0
     ..pause!
+
+apply-foreground = ->
+  if !is-blink => $ \#timer .css \color, foreground-color
+
+apply-background = ->
+  $ \#timer .css \background, background-color
+
+set-foreground = (color) ->
+  foreground-color := color
+  apply-foreground!
+
+set-background-color = (color) ->
+  background-color := color
+  apply-background!
+
+open-foreground-picker = ->
+  document.getElementById('foregroundPicker').click!
+
+open-background-picker = ->
+  document.getElementById('backgroundPicker').click!
+
+update-volume = (value) ->
+  end-volume := value / 100
+  if audio-end => audio-end.volume = end-volume
+  $ \#volumeValue .text "#{Math.round(value)}%"
 
 show = ->
   is-show := !is-show
@@ -64,14 +92,14 @@ reset = ->
   if handler => clearInterval handler
   handler := null
   $ \#timer .text delay
-  $ \#timer .css \color, \#fff
+  apply-foreground!
   resize!
 
 
 blink = ->
   is-blink := true
   is-light := !is-light
-  $ \#timer .css \color, if is-light => \#fff else \#f00
+  $ \#timer .css \color, if is-light => foreground-color else \#f00
 
 count = ->
   tm = $ \#timer
@@ -112,8 +140,15 @@ resize = ->
 window.onload = ->
   $ \#timer .text delay
   resize!
+  apply-background!
+  apply-foreground!
+  $ \#foregroundPicker .val foreground-color
+  $ \#backgroundPicker .val background-color
+  $ \#volumeSlider .val end-volume * 100
+  $ \#volumeValue .text "#{Math.round(end-volume * 100)}%"
   #audio-remind := new-audio \audio/cop-car.mp3
   #audio-end := new-audio \audio/fire-alarm.mp3
   audio-remind := new-audio \audio/smb_warning.mp3
   audio-end := new-audio \audio/smb_mariodie.mp3
+  audio-end.volume = end-volume
 window.onresize = -> resize!

@@ -15,7 +15,7 @@ html, body
   height: 100%
   line-height: 100%
   background: #000
-  color: #fff
+  color: #222
   text-align: center
   font-weight: 700
   font-family: century gothic
@@ -77,3 +77,31 @@ html, body
   position: absolute
   top: 10px
   left: 10px
+
+.color-input
+  display: none
+
+#color-controls
+  position: absolute
+  top: 55px
+  left: 50%
+  transform: translateX(-50%)
+  display: flex
+  gap: 10px
+  z-index: 5
+
+#volume-control
+  position: absolute
+  bottom: 60px
+  right: 10px
+  display: flex
+  flex-direction: column
+  gap: 6px
+  padding: 8px 10px
+  background: rgba(0, 0, 0, 0.4)
+  border-radius: 6px
+  color: #fff
+  font-weight: 700
+
+#volumeSlider
+  width: 180px
